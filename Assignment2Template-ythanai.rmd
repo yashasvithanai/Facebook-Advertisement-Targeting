@@ -1,0 +1,78 @@
+---
+title: "Assignment 2"
+author: "Yashasvi Thanai"
+output: html_document
+---
+
+**Question 1A:**
+```{r Question 1A}
+#INSERT CODE HERE
+# loading the data 
+setwd("/Users/yashasvithanai/Desktop/Simon/Predictive & Causal Analytics/HW 2")
+
+facebookData <- read.csv("Facebook Data.csv")
+
+# running the required regression
+facebookDataReg <- lm(clickPerDollar~factor(adType)+factor(category)+factor(placement)+ factor(keywords)+factor(body)+ageMean, facebookData)
+summary(facebookDataReg)
+```
+
+
+**Question 1B:**
+```{r Question 1B}
+#INSERT CODE HERE
+#Comment out the line that gives you an error so that you can compile it
+# regWithDate <- lm(clickPerDollar~factor(adType)+factor(category)+factor(placement)+ factor(keywords)+factor(body)+ageMean + factor(date), facebookData)
+#error returned
+
+#The error is returned as the variable factor(date) contains only one value and can’t be divided into levels of categories. 
+```
+
+
+**Question 1C:**
+```{r Question 1C}
+#INSERT CODE HERE
+levels(factor(facebookData$category)) 
+# Cosmetics will be baseline Category
+# coefficient of factor(category)General: -45.741606
+# CI (-47.44416, -44.039048)
+
+# The coefficient shows that clicksPerDollar will be 45.71416 less for retailers in General category compared to the baseline category Cosmetics. 
+# The CI (-47.44416, -44.039) gives the interval of expected difference in clicksperDollar compared to retailers in Cosmetics category.
+```
+
+**Question 1D:**
+```{r Question 1D}
+#INSERT CODE HERE
+summary(facebookDataReg) 
+# running summary to obtain values
+# The coefficient shows that if ageMean increases by 1, clicksPerDollar will increase by 2.5988. 
+# The CI (2.559, 2.638) gives the interval of expected change in clicksPerDollar with a unit increase in average age of targeted customers.
+```
+
+
+**Question 2A:**
+```{r Question 2A}
+#INSERT CODE HERE - WRITTEN ANSWER ON BLACKBOARD
+# running the interaction regression 
+InteractionRegression <- lm(clickPerDollar~factor(adType)+factor(category)+factor(placement)+ factor(keywords)+factor(body)+ageMean + factor(category)*ageMean, facebookData)
+summary(InteractionRegression)
+# factor(category)eCom:ageMean coefficient    -0.36125 
+
+#-0.36125 gives the effect of average age on marginal effect of eCom category on clicksPerDollar.  
+# If average age increases by 1, the marginal effect of eCom Category would be
+# (-28.29490 - 0.35125 = -28.64615) on clicksPerDollar compared to the baseline cosmetics category.
+
+```
+
+
+**Question 2B:**
+```{r Question 2B}
+#INSERT CODE HERE 
+# marginal effect of factor(Category)eCom 
+# in part 1a: (-42.643506)
+# in part 2a: (-28.2949 - 0.36125*ageMean)
+# In part 1a, clicksPerDollar of retailer from eCom category will have reduced by 42.6435 compared to cosmetics category
+# while in part 2a, eCom category will have a difference of (-28.2949 -0.36125*ageMean) from cosmetics. 
+# The Category does not depend on avgMean in 1a, but the effect is considered in 2a. 
+```
